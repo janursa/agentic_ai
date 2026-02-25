@@ -1,6 +1,6 @@
 # LlamaIndex-Based Immune Aging Analysis Agent
 
-This branch implements a LlamaIndex ReAct agent that combines omics data analysis with RAG-powered literature search.
+This branch implements a LlamaIndex ReAct agent that combines omics data analysis with RAG-powered literature search and web search.
 
 ## Architecture
 
@@ -8,6 +8,7 @@ This branch implements a LlamaIndex ReAct agent that combines omics data analysi
 1. **Omics Data Tools**: Functions to retrieve aging/intervention signatures from immune cell analysis
 2. **Literature RAG**: Vector-indexed scientific papers for biological context
 3. **Manuscript RAG**: Vector-indexed main manuscript document
+4. **Web Search**: Internet search for current information (Tavily or DuckDuckGo)
 
 ## Setup
 
@@ -19,14 +20,25 @@ conda activate llamaindex
 
 ### 2. Install Dependencies
 ```bash
-pip install llama-index llama-index-llms-openai python-dotenv
+pip install llama-index llama-index-llms-openai python-dotenv tavily-python duckduckgo-search
 ```
 
-### 3. Set OpenAI API Key
+### 3. Set API Keys
 Create a `.env` file in the project root:
 ```bash
 cp .env.template .env
-# Edit .env and add your OpenAI API key
+# Edit .env and add:
+# - OPENAI_API_KEY (required)
+# - TAVILY_API_KEY (optional - only if using Tavily search)
+```
+
+**Web Search Options:**
+- **Tavily** (default): AI-optimized search, requires API key ([get free key](https://tavily.com) - 1000 searches/month)
+- **DuckDuckGo**: Free, no API key needed
+
+To switch between providers, edit `src/config.py`:
+```python
+WEB_SEARCH_PROVIDER = "tavily"  # or "duckduckgo"
 ```
 
 ### 4. Prepare Literature
@@ -66,11 +78,25 @@ asyncio.run(main())
    - Validates inputs using metadata tools
    - Retrieves omics data as needed
    - Searches literature for context
-3. **Agent synthesizes** data + literature into final answer
+   - Searches web for current information (if needed)
+3. **Agent synthesizes** data + literature + web results into final answer
 
 ## Example Queries
 
 **Omics Data:**
+- "What transcription factors decrease with age in CD8T cells?"
+- "Show me the effects of IL-2 on monocytes"
+
+**Literature Search:**
+- "What is known about BACH2 in immune aging?"
+- "Find papers about senescence interventions"
+
+**Web Search:**
+- "What are the latest clinical trials for immune aging interventions?"
+- "Recent research on senolytics in 2025"
+- "Current therapies for immunosenescence"
+
+**Combined Analysis:**
 - "What transcription factors decrease with age in CD8T cells?"
 - "Show me the effects of IL-2 on monocytes"
 

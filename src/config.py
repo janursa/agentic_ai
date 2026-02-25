@@ -4,6 +4,11 @@ from hiara.src.config import MAJOR_CTS
 
 
 MODEL_ID = "gpt-4o"
+
+# Web search configuration
+# Options: "tavily" or "duckduckgo"
+WEB_SEARCH_PROVIDER = "tavily"  # Start with free option for testing
+
 interventions_2_dataset = {
     'drug': 'op',
     'cytokine': 'parsebioscience',
@@ -17,3 +22,4 @@ cell_types = {
     # SUB_CT_LABEL: SUB_CTS,
     MAJOR_CT_LABEL: MAJOR_CTS,
 }
+

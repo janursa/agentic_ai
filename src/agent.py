@@ -1,6 +1,6 @@
 """
 LlamaIndex ReAct Agent for Immune Aging Analysis.
-Combines omics data tools with RAG-powered literature search.
+Combines omics data tools with RAG-powered literature search and web search.
 """
 
 import os
@@ -23,6 +23,7 @@ from helper import (
     get_available_features
 )
 from rag_builder import get_or_build_indices
+from web_search import create_web_search_tool
 
 
 def create_omics_tools():
@@ -163,7 +164,7 @@ def create_agent(
     Returns:
         ReActAgent: The configured agent
     """
-    # Load environment variables (for OPENAI_API_KEY)
+    # Load environment variables (for OPENAI_API_KEY, TAVILY_API_KEY)
     load_dotenv()
     
     # Initialize LLM
@@ -172,7 +173,17 @@ def create_agent(
     # Create all tools
     omics_tools = create_omics_tools()
     rag_tools = create_rag_tools(literature_index, manuscript_index)
-    all_tools = omics_tools + rag_tools
+    
+    # Create web search tool (will use provider from config)
+    try:
+        web_search_tool = create_web_search_tool()
+        web_tools = [web_search_tool]
+        print("✓ Web search tool enabled")
+    except (ImportError, ValueError) as e:
+        print(f"⚠ Web search disabled: {e}")
+        web_tools = []
+    
+    all_tools = omics_tools + rag_tools + web_tools
     
     # Load system instructions
     instructions_path = Path(__file__).parent / "instructions.txt"

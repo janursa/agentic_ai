@@ -19,6 +19,7 @@ async def interactive_mode():
     print("  • OMICS DATA: Factual findings from immune aging analysis")
     print("  • LITERATURE: Scientific papers for biological context")
     print("  • MANUSCRIPT: Main manuscript about immune aging")
+    print("  • INTERNET: Web search for additional information")
     print("\nCapabilities:")
     print("  - Answer questions about aging signatures in different cell types")
     print("  - Retrieve intervention effects on immune cells")
