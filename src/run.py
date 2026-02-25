@@ -5,6 +5,7 @@ Main script to run the LlamaIndex ReAct agent for immune aging analysis.
 import asyncio
 from pathlib import Path
 from llama_index.core.agent.workflow import AgentStream, ToolCallResult
+from llama_index.core.workflow import Context
 from agent import initialize_agent
 
 
@@ -31,6 +32,9 @@ async def interactive_mode():
     # Initialize agent
     agent = initialize_agent()
     
+    # Create context for conversation history/session state
+    ctx = Context(agent)
+    
     while True:
         try:
             user_input = input("\nYou: ").strip()
@@ -54,8 +58,8 @@ async def interactive_mode():
             print(f"PROCESSING: {user_input}")
             print(f"{'='*80}\n")
             
-            # Run agent
-            handler = agent.run(user_input)
+            # Run agent with context to maintain conversation history
+            handler = agent.run(user_input, ctx=ctx)
             
             # Stream the response
             print("Agent: ", end="", flush=True)
@@ -116,8 +120,11 @@ async def single_query(question: str):
     # Initialize agent
     agent = initialize_agent()
     
-    # Run query
-    handler = agent.run(question)
+    # Create context for the session
+    ctx = Context(agent)
+    
+    # Run query with context
+    handler = agent.run(question, ctx=ctx)
     
     # Stream response
     async for ev in handler.stream_events():
