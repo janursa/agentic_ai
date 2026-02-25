@@ -1,5 +1,7 @@
 #!/bin/bash
-# run the script in py10 environment
+# Run the LlamaIndex agent
+cd "$(dirname "$0")/.." || exit 1
 source ~/.bash_profile
-conda activate agent_framework
-python src/script.py -i
+conda activate llamaindex
+cd src
+python run.py "$@"

@@ -3,13 +3,11 @@
 import pandas as pd
 from typing import Dict, List, Optional, Literal
 from dataclasses import dataclass
-from agent_framework import tool
 from hiara.src.feature_association.helper import retrieve_sig_stats
 from hiara.src.config import ANALYSIS_DEF, FEATURE_DEF
 from config import interventions, cell_types, interventions_2_dataset
 
 
-@tool
 def get_available_cell_types() -> str:
     """
     Get list of all available cell types for analysis.
@@ -28,7 +26,6 @@ def get_available_cell_types() -> str:
     return output
 
 
-@tool
 def get_available_interventions() -> str:
     """
     Get list of all available interventions (drugs and cytokines).
@@ -44,7 +41,6 @@ def get_available_interventions() -> str:
     return output
 
 
-@tool
 def get_available_analysis_types() -> str:
     """
     Get all available analysis types with descriptions.
@@ -72,7 +68,6 @@ def get_available_analysis_types() -> str:
     return output
 
 
-@tool
 def get_available_features() -> str:
     """
     Get all available feature types with descriptions.
@@ -84,7 +79,6 @@ def get_available_features() -> str:
     
     return output
 
-@tool
 def get_aging_signature(cell_type: str, analysis_name: str) -> str:
     """
     Retrieve aging-associated features for a cell type from a specific analysis.
@@ -140,7 +134,6 @@ def get_aging_signature(cell_type: str, analysis_name: str) -> str:
         return f"Error retrieving aging signature for {cell_type} with {analysis_name}: {e}"
 
 
-@tool
 def get_intervention_signature(intervention: str, cell_type: str, analysis_name: str) -> str:
     """
     Retrieve intervention effects for a cell type from a specific analysis.
@@ -247,7 +240,6 @@ def get_intervention_signature(intervention: str, cell_type: str, analysis_name:
         return f"Error retrieving intervention signature for {intervention} in {cell_type} with {analysis_name}: {e}"
 
 
-@tool
 def get_disease_signature(disease: str, cell_type: str, analysis_name: str) -> str:
     """
     Retrieve disease-associated changes for a cell type from a specific analysis.
